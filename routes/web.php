@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,6 +14,27 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+
+Route::view('/', 'welcome');
+
+Route::controller('Room')
+->prefix('rooms')
+->name('rooms')
+->middleware('auth')
+->group(function(){
+
+    Route::get('/create', 'create')->name('.create');
+
 });
+
+Route::controller('Login')->prefix('login')->name('login')->group(function(){
+    Route::get('/', 'index');
+    Route::post('/', 'store')->name('.store');
+});
+
+Route::controller('Signup')->prefix('signup')->name('signup')->group(function(){
+    Route::get('/','index');
+    Route::post('/', 'store')->name('.store');
+});
+
+

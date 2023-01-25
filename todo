@@ -1,0 +1,77 @@
+=================================================
+| Migrations + Models + Relations:
+=================================================
+rooms
+    id, name, struct, space_img, block_img, width, height, created_by
+        xxxx
+    xxx xxx
+    xxx xx   
+    xxx    xxxx
+    xxxxxxxxxxx
+    
+locations
+    id
+    room_id
+    pos_x
+    pos_y
+
+users_locations
+    id
+    user_id
+    location_id
+   
+warps
+    id
+    room1_id
+    room2_id
+
+warps_locations
+    id
+    warp_id
+    location_id
+
+|============================
+| Service: Texture Generator
+|============================
+- Build Image 50x50
+- Extract random frag from pool of images
+- Use GD to darken and derive "space" from "block"
+- return "space" + "block"
+
+===========================
+| Texture Maker
+===========================
+
+- Expect input_glob constructor arg
+- Create config 'textures.php' with input_glob => '...'
+- Create a bind on service provider passing config('textures.input_glob')
+
+============================
+| Room Factory:
+============================
+
+- Create Random Room
+- Room Method spawnWarpTo(Room2)
+- Room Method getAvailablePositions()
+- Select a Random Room (if exists) (prefer rooms without warps) and Link Through Location / Warp
+- Create method Room->findAvailablePositions() [x,y] [x,y] etc...
+
+===============================
+| /rooms (auth)
+================================
+- Name | Thumbnail | [Teleport] (todo: teleport will cost money/points later)
+
+===========================
+| /rooms/{room} (auth)
+===========================
+- If user is not located -> redirect /rooms
+- If user is not in this room -> show error / redirect
+- Otherwise: show room at current position
+- Allow click on spaces to move
+
+===========================
+| /rooms/{room}/move (auth)
+===========================
+- Grab x, y -> realocate user
+- redirect to /rooms/{id}
+
