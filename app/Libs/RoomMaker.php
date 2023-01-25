@@ -23,7 +23,8 @@ class RoomMaker{
         }
         $num_cells = $this->width * $this->height;
         $cnt_spaces = 0;
-        while($cnt_spaces < $num_cells / 3){
+        $max_spaces = $num_cells / mt_rand(2,8);
+        while($cnt_spaces < $max_spaces){
             $x = rand(1,$this->width-1);
             $y = rand(1,$this->height-1);
             $step_x = rand(0,1) ? 1 : -1;
@@ -62,26 +63,55 @@ class RoomMakerStruct{
     }
 
     function beautify(){
-        foreach($this->struct as $y => $line){
-            foreach($line as $x => $cell){
-                if($this->isBlock($y, $x)
-                    && !$this->isBlock($y-1, $x)
-                    && !$this->isBlock($y+1, $x)
-                    && !$this->isBlock($y, $x-1)
-                    && !$this->isBlock($y, $x+1)
-                ){
-                    $this->struct[$y][$x] = $this->space_char;
+        for($i=1;$i<=10;$i++){
+            $changes = 0;
+            foreach($this->struct as $y => $line){
+                foreach($line as $x => $cell){
+                    // remove blocks surrounded by spaces
+                    if($this->isBlock($y, $x)
+                        && !$this->isBlock($y-1, $x)
+                        && !$this->isBlock($y+1, $x)
+                        && !$this->isBlock($y, $x-1)
+                        && !$this->isBlock($y, $x+1)
+                    ){
+                        $this->struct[$y][$x] = $this->space_char;
+                        $changes++;
+                    }
+                    // remove spaces surrounded by blocks
+                    if(!$this->isBlock($y, $x)
+                        && $this->isBlock($y-1, $x)
+                        && $this->isBlock($y+1, $x)
+                        && $this->isBlock($y, $x-1)
+                        && $this->isBlock($y, $x+1)
+                    ){
+                        $this->struct[$y][$x] = $this->block_char;
+                        $changes++;
+                    }
+                    // xxxxx           xxxxx
+                    // xx  x  Becomes  xxx x
+                    //   xxx             xxx
+                    //
+                    if($this->isBlock($y, $x)){
+                        if(
+                            $this->isBlock($y-1, $x+1)
+                            && !$this->isBlock($y, $x+1)
+                            && !$this->isBlock($y-1, $x)
+                        ){
+                            $struct[$y][$x+1] = $this->block_char;
+                            $changes++;
+                        }
+                        if(
+                            $this->isBlock($y-1, $x-1)
+                            && !$this->isBlock($y, $x-1)
+                            && !$this->isBlock($y-1, $x)
+                        ){
+                            $struct[$y][$x-1] = $this->block_char;
+                            $changes++;
+                        }
+                    }
                 }
-                if(!$this->isBlock($y, $x)
-                    && $this->isBlock($y-1, $x)
-                    && $this->isBlock($y+1, $x)
-                    && $this->isBlock($y, $x-1)
-                    && $this->isBlock($y, $x+1)
-                ){
-                    $this->struct[$y][$x] = $this->block_char;
-                }
-
             }
+            if(!$changes) break;
         }
         return $this;
     }

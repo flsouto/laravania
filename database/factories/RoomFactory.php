@@ -24,11 +24,10 @@ class RoomFactory extends Factory
         $d->putFileAs('/', new File($block_f), $base_bf);
         $d->putFileAs('/', new File($space_f), $base_sf);
 
-        $struct = <<<STR
-xxxxxxxxxxxxxx
-x            x
-xxxxxxxxxxxxxx
-STR;
+        $rm = app(\App\Libs\RoomMaker::class,[
+            'width' => 50, 'height' => 50
+        ]);
+        $struct = $rm->make()->beautify()->__toString();
         return [
             'name' => $this->faker->city(),
             'struct' => $struct,
