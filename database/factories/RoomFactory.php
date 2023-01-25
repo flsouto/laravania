@@ -17,8 +17,7 @@ class RoomFactory extends Factory
     {
 
         $tm = app(\App\Libs\TextureMaker::class);
-        [$block_f, $space_f] = $tm->createBlockAndSpace();
-        $f = new File($block_f);
+        [$block_f, $space_f] = $tm->makeBlockAndSpace();
         $base_sf = basename($space_f);
         $base_bf = basename($block_f);
         $d = Storage::disk('public');

@@ -97,7 +97,7 @@ class TextureMaker{
         return $seed;
     }
 
-    function createBlock(){
+    function makeBlock(){
 
         $seed = $this->seed();
 
@@ -147,11 +147,11 @@ class TextureMaker{
         return $f;
     }
 
-    function createBlockAndSpace(){
+    function makeBlockAndSpace(){
 
         $seed = $this->seed();
 
-        $block = imagecreatefromjpeg($bf = $this->createBlock());
+        $block = imagecreatefromjpeg($bf = $this->makeBlock());
         $space = clone_and_darken($block,mt_rand(2,4)/10);
 
         if(mt_rand(0,1)){
